@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: forge-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${FORGE_DB_NAME}}
+      POSTGRES_USER: ${FORGE_DB_USER}}
+      POSTGRES_PASSWORD: ${FORGE_DB_PASSWORD}}
+    ports:
+      - "5432:5432"
+    volumes:
+      - forge_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U forge -d forge"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  forge_postgres_data:
